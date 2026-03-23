@@ -1,0 +1,1 @@
+# Automa-o-de-disparo-VIA-WHATSAPP-e-N8N
