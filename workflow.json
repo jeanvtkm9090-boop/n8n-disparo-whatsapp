@@ -1,0 +1,793 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "87169a18-9b8e-46c5-9ed7-9347b4278400",
+              "leftValue": "={{ $json.messages[0].message_status }}",
+              "rightValue": "accepted",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [1264, 352],
+      "id": "22a9002a-196a-43b3-8adc-e031403626be",
+      "name": "If - Mensagem Aceita?"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "SEU_GOOGLE_SHEETS_ID_AQUI",
+          "mode": "list",
+          "cachedResultName": "Lista de disparos repesca"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Leads",
+          "mode": "list",
+          "cachedResultName": "Leads"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $json.row_number }}",
+            "status": "Sucesso",
+            "Hora": "={{ $now.setZone('America/Sao_Paulo').toFormat('dd/MM/yyyy HH:mm:ss') }}"
+          },
+          "matchingColumns": ["row_number"],
+          "schema": [
+            { "id": "status", "displayName": "status", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "Hora", "displayName": "Hora", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "row_number", "displayName": "row_number", "required": false, "defaultMatch": false, "display": true, "type": "number", "canBeUsedToMatch": true, "readOnly": true }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [1264, 176],
+      "id": "13f91bfc-249a-44d7-b595-f5aed23fdb59",
+      "name": "Update - Sucesso",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "SUA_CREDENTIAL_ID",
+          "name": "NOME_DA_SUA_CREDENCIAL_GOOGLE"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "SEU_GOOGLE_SHEETS_ID_AQUI",
+          "mode": "list",
+          "cachedResultName": "Lista de disparos repesca"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Leads",
+          "mode": "list",
+          "cachedResultName": "Leads"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $json.row_number }}",
+            "status": "Falha",
+            "Hora": "={{ $now.setZone('America/Sao_Paulo').toFormat('dd/MM/yyyy HH:mm:ss') }}"
+          },
+          "matchingColumns": ["row_number"],
+          "schema": [
+            { "id": "status", "displayName": "status", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "Hora", "displayName": "Hora", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "row_number", "displayName": "row_number", "required": false, "defaultMatch": false, "display": true, "type": "number", "canBeUsedToMatch": true, "readOnly": true }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [1264, 560],
+      "id": "94fcedd2-9e09-4934-a927-e31878d695d0",
+      "name": "Update - Falha",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "SUA_CREDENTIAL_ID",
+          "name": "NOME_DA_SUA_CREDENCIAL_GOOGLE"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{ "field": "minutes", "minutesInterval": 1 }]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [-2544, 1024],
+      "id": "ffb2d067-890c-4e54-9256-7a95c83fef15",
+      "name": "Schedule Trigger - A cada 1 minuto"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "SEU_GOOGLE_SHEETS_ID_AQUI",
+          "mode": "list",
+          "cachedResultName": "Lista de disparos repesca"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Painel",
+          "mode": "list",
+          "cachedResultName": "Painel"
+        },
+        "filtersUI": {
+          "values": [{ "lookupColumn": "Start", "lookupValue": "true" }]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [-2368, 1024],
+      "id": "3c032996-8040-4eb2-8610-b0477eee5918",
+      "name": "Get - Botão (verifica se Start=true)",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "SUA_CREDENTIAL_ID",
+          "name": "NOME_DA_SUA_CREDENCIAL_GOOGLE"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "SEU_GOOGLE_SHEETS_ID_AQUI",
+          "mode": "list",
+          "cachedResultName": "Lista de disparos repesca"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Painel",
+          "mode": "list",
+          "cachedResultName": "Painel"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $json.row_number }}",
+            "Start": "false"
+          },
+          "matchingColumns": ["row_number"],
+          "schema": [
+            { "id": "Start", "displayName": "Start", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "row_number", "displayName": "row_number", "required": false, "defaultMatch": false, "display": true, "type": "number", "canBeUsedToMatch": true, "readOnly": true }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [-2048, 1024],
+      "id": "b70a5f4e-bd2b-4296-8b93-5f03bdc2635c",
+      "name": "Update - Botão (reseta Start=false)",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "SUA_CREDENTIAL_ID",
+          "name": "NOME_DA_SUA_CREDENCIAL_GOOGLE"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "SEU_GOOGLE_SHEETS_ID_AQUI",
+          "mode": "list",
+          "cachedResultName": "Lista de disparos repesca"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Leads",
+          "mode": "list",
+          "cachedResultName": "Leads"
+        },
+        "filtersUI": {
+          "values": [{ "lookupColumn": "status" }]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [-1872, 1024],
+      "id": "8137c54c-4405-497d-90ac-c07a0ee3bbd6",
+      "name": "Get - Leads (sem status)",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "SUA_CREDENTIAL_ID",
+          "name": "NOME_DA_SUA_CREDENCIAL_GOOGLE"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "dataToSave": {
+          "values": [{ "key": "execution", "value": "true" }]
+        }
+      },
+      "type": "n8n-nodes-base.executionData",
+      "typeVersion": 1.1,
+      "position": [-2208, 1024],
+      "id": "981825b1-0912-4841-9ee4-fb0413710b3e",
+      "name": "Execution Data - marca execução"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $items().flatMap(item => {\n  const original = String(item.json.phone ?? \"\").replace(/\\D/g, \"\");\n\n  if (!original) {\n    return [{ json: { ...item.json, phone: \"\", original_phone: \"\" } }];\n  }\n\n  let country = \"\";\n  let number = original;\n\n  if (number.startsWith(\"55\")) {\n    country = \"55\";\n    number = number.slice(2);\n  }\n\n  const ddd = number.slice(0, 2);\n  let restante = number.slice(2);\n\n  let com9, sem9;\n  if (restante.startsWith(\"9\")) {\n    com9 = restante;\n    sem9 = restante.slice(1);\n  } else {\n    sem9 = restante;\n    com9 = \"9\" + restante;\n  }\n\n  const numeroCom9 = country + ddd + com9;\n  const numeroSem9 = country + ddd + sem9;\n\n  const numeros = [...new Set([original, numeroCom9, numeroSem9])];\n\n  return numeros.map(num => ({\n    json: { ...item.json, phone: num, original_phone: original }\n  }));\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-1680, 1024],
+      "id": "8ea43088-f68f-4492-86dc-64c9840970f5",
+      "name": "Gera variações do número (com/sem 9)"
+    },
+    {
+      "parameters": {
+        "resource": "profile-api",
+        "instanceName": "NOME_DA_SUA_INSTANCIA_EVOLUTION",
+        "remoteJid": "={{ $json.phone }}"
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [-1024, 1040],
+      "id": "e7abcbdc-b38a-4529-81ee-aa88ec57c894",
+      "name": "Buscar perfil (Evolution API)",
+      "credentials": {
+        "evolutionApi": {
+          "id": "SUA_CREDENTIAL_ID",
+          "name": "NOME_DA_SUA_CREDENCIAL_EVOLUTION"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": { "options": {} },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [-1264, 1024],
+      "id": "56cb1ce6-7f0a-4fbb-bb68-9e9e5a71e097",
+      "name": "Loop - Variações de número"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Continuar loop variações",
+      "typeVersion": 1,
+      "position": [-400, 1040],
+      "id": "464e5696-7f87-4af2-9597-b539748ee5d5"
+    },
+    {
+      "parameters": {
+        "jsCode": "const seen = new Set();\n\nreturn $items()\n  .map(i => i.json)\n  .filter(i => i && i.data && i.data.wuid)\n  .filter(i => {\n    let id = String(i.data.wuid)\n      .replace(\"@s.whatsapp.net\", \"\")\n      .replace(\"@c.us\", \"\")\n      .replace(/\\D/g, \"\");\n\n    if (id.startsWith(\"55\") && id.length === 13 && id[4] === \"9\") {\n      id = id.slice(0, 4) + id.slice(5);\n    }\n\n    if (seen.has(id)) return false;\n    seen.add(id);\n    return true;\n  })\n  .map(i => {\n    const data = i.data;\n\n    const originalRaw = (i.original_phone ?? data.original_phone ?? null);\n    const original_phone =\n      originalRaw === null || String(originalRaw).trim() === \"\"\n        ? null\n        : String(originalRaw).replace(/\\D/g, \"\");\n\n    const rowRaw = (i.row_number ?? data.row_number ?? null);\n    const row_number =\n      rowRaw === null || String(rowRaw).trim() === \"\"\n        ? null\n        : Number(rowRaw);\n\n    return {\n      json: {\n        wuid: data.wuid,\n        numberExists: data.numberExists,\n        razao: i.razao ?? data.razao ?? \"\",\n        cnpj: String(i.cnpj ?? data.cnpj ?? \"\"),\n        observacao: i.observacao ?? data.observacao ?? \"\",\n        ...(data.picture ? { picture: data.picture } : {}),\n        ...(data.status?.status ? { status: String(data.status.status).trim() } : {}),\n        ...(data.isBusiness !== undefined ? { isBusiness: data.isBusiness } : {}),\n        ...(original_phone ? { original_phone } : {}),\n        ...(row_number !== null && !Number.isNaN(row_number) ? { row_number } : {})\n      }\n    };\n  });"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-1264, 864],
+      "id": "df577d44-0d2e-4f95-8cd8-60077b0c5f78",
+      "name": "Filtra duplicados e monta objeto do contato"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "SEU_GOOGLE_SHEETS_ID_AQUI",
+          "mode": "list",
+          "cachedResultName": "Lista de disparos repesca"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Leads",
+          "mode": "list",
+          "cachedResultName": "Leads"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $json.row_number }}",
+            "Número corrigido": "={{ $('Filtra duplicados e monta objeto do contato').item.json.wuid.replace(/\\D/g, '') }}"
+          },
+          "matchingColumns": ["row_number"],
+          "schema": [
+            { "id": "Número corrigido", "displayName": "Número corrigido", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "row_number", "displayName": "row_number", "required": false, "defaultMatch": false, "display": true, "type": "number", "canBeUsedToMatch": true, "readOnly": true }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [-1264, 688],
+      "id": "20385f94-5b61-46e3-928f-ba038cee328b",
+      "name": "Update - Salva número corrigido",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "SUA_CREDENTIAL_ID",
+          "name": "NOME_DA_SUA_CREDENCIAL_GOOGLE"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            { "id": "0fd9ee51-91f9-4daa-b794-f6fb2cb41fbf", "name": "original_phone", "value": "={{ $json.original_phone }}", "type": "string" },
+            { "id": "412fbd37-b552-4be5-819f-81ac0e0dc2ee", "name": "row_number", "value": "={{ $json.row_number }}", "type": "number" },
+            { "id": "ded15b7d-3ca4-4c95-bc92-1b66714e568f", "name": "razao", "value": "={{ $json.razao }}", "type": "string" },
+            { "id": "f85cd2ec-8374-46f9-9ecc-3ac353642f31", "name": "cnpj", "value": "={{ $json.cnpj }}", "type": "string" },
+            { "id": "2fef33f2-2840-4b9e-a41e-41ea51ed4fae", "name": "phone", "value": "={{ $json.phone }}", "type": "string" },
+            { "id": "565a4258-5e08-44d6-847e-f5a578fb4da5", "name": "observacao", "value": "={{ $json.observacao }}", "type": "string" },
+            { "id": "89bc3964-7ff3-4edf-b160-20e2e5352813", "name": "status", "value": "={{ $json.status }}", "type": "string" },
+            { "id": "ea735529-c6f2-4b67-9e3a-0e63a367463c", "name": "Número corrigido", "value": "={{ $json[\"Número corrigido\"] }}", "type": "string" }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [-1472, 1024],
+      "id": "abc1c1ef-eb25-46ee-a4f4-f8613de962d8",
+      "name": "Prepara campos do lead"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            { "id": "a08b5fd9-0a09-4ff2-96d6-c57f5ff39723", "name": "data.wuid", "value": "={{ $json.data.wuid }}", "type": "string" },
+            { "id": "87e4e2cd-4b12-4cad-bbaa-600a826d1619", "name": "data.numberExists", "value": "={{ $json.data.numberExists }}", "type": "boolean" },
+            { "id": "6649caf7-6e92-4881-bde0-00253b3ca586", "name": "row_number", "value": "={{ $('Loop - Variações de número').item.json.row_number }}", "type": "number" },
+            { "id": "c5c4d143-0c9b-4872-bd5e-ab3f355fe705", "name": "original_phone", "value": "={{ $('Loop - Variações de número').item.json.original_phone }}", "type": "string" },
+            { "id": "5124d574-8617-4a9f-9d5e-9e9f980f017d", "name": "razao", "value": "={{ $('Loop - Variações de número').item.json.razao }}", "type": "string" },
+            { "id": "bb6588cb-45ee-4876-a9ec-ab8ed192180d", "name": "cnpj", "value": "={{ $('Loop - Variações de número').item.json.cnpj }}", "type": "string" },
+            { "id": "23c954fd-6a65-4ec5-a3f5-1c8bc29640cf", "name": "observacao", "value": "={{ $('Loop - Variações de número').item.json.observacao }}", "type": "string" }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [-816, 1040],
+      "id": "ef27141e-23df-4e20-aa3e-6109304f11c2",
+      "name": "Enriquece com dados do loop"
+    },
+    {
+      "parameters": { "amount": 0.2 },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [-608, 1040],
+      "id": "cc567894-b85a-4f32-bfa7-2c11d579d0b8",
+      "name": "Wait 0.2s (desativado)",
+      "webhookId": "WEBHOOK_ID_PLACEHOLDER",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "url": "=https://SEU_DOMINIO_CHATWOOT/api/v1/accounts/SEU_ACCOUNT_ID/contacts/search?q={{ $json.wuid.replace(/\\D/g, '') }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "api_access_token", "value": "SEU_TOKEN_CHATWOOT_AQUI" }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [-800, 752],
+      "id": "b20d89d8-3992-4bbb-a86f-8e2db1464ec8",
+      "name": "Buscar contato (Chatwoot)"
+    },
+    {
+      "parameters": { "batchSize": 60, "options": {} },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [-1024, 688],
+      "id": "5ba1d57e-cfa7-4077-ae38-da02d820bcb3",
+      "name": "Loop - Lotes de 60 contatos"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Continuar loop de lotes",
+      "typeVersion": 1,
+      "position": [-80, 752],
+      "id": "d4d86013-659d-4994-8af2-0a8f17b286ef"
+    },
+    {
+      "parameters": { "amount": 1, "unit": "minutes" },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [-352, 752],
+      "id": "5d0e6165-2de1-4172-bbde-e211a6c71da4",
+      "name": "Wait 1 min (entre lotes)",
+      "webhookId": "WEBHOOK_ID_PLACEHOLDER_2"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 2 },
+                "conditions": [
+                  { "leftValue": "={{ $json.meta.count }}", "rightValue": 1, "operator": { "type": "number", "operation": "gte" }, "id": "98de57d9-33b3-424a-b4c3-58720bdc61cf" }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Cliente existente"
+            },
+            {
+              "conditions": {
+                "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 2 },
+                "conditions": [
+                  { "id": "aebd15a1-b4eb-4205-9f83-e646c01811a8", "leftValue": "={{ $json.meta.count }}", "rightValue": 0, "operator": { "type": "number", "operation": "equals" } }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Novo Cliente"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [-592, 544],
+      "id": "c77e053f-df28-45f6-8737-f11b2089797d",
+      "name": "Switch - Contato existe no Chatwoot?"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            { "id": "cda79448-1cd8-46dc-b9d5-7cf49c2c969b", "name": "razao", "value": "={{ $('Loop - Lotes de 60 contatos').item.json.razao }}", "type": "string" },
+            { "id": "e2da284d-f83e-40a5-be38-39ed040ad732", "name": "cnpj", "value": "={{ $('Loop - Lotes de 60 contatos').item.json.cnpj }}", "type": "string" },
+            { "id": "54696577-91ce-4dff-a0a5-875ca76ee5ce", "name": "wuid", "value": "={{ $('Loop - Lotes de 60 contatos').item.json.wuid.replace(/\\D/g, '') }}", "type": "string" },
+            { "id": "6f3cd391-49e6-4b8a-b8a2-de27272c842e", "name": "observacao", "value": "={{ $('Loop - Lotes de 60 contatos').item.json.observacao }}", "type": "string" },
+            { "id": "519e5c21-8eef-4a3e-9c90-0fba0f6db8b9", "name": "row_number", "value": "={{ $('Loop - Lotes de 60 contatos').item.json.row_number }}", "type": "number" }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [-576, 752],
+      "id": "4e686834-f947-48a4-bf6c-000d6ac0d96f",
+      "name": "Prepara dados do contato existente"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://SEU_DOMINIO_CHATWOOT/api/v1/accounts/SEU_ACCOUNT_ID/contacts",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{ "name": "api_access_token", "value": "SEU_TOKEN_CHATWOOT_AQUI" }]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"phone_number\": \"{{ '+55' + ($json.wuid || '').replace(/\\D/g, '').replace(/^55/, '') }}\",\n  \"name\": \"{{ $json.razao }}\",\n  \"custom_attributes\": {\n    \"cnpj\": \"{{ $json.cnpj }}\",\n    \"nome_cliente\": \"{{ $json.razao }}\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [-480, 320],
+      "id": "941b46a4-5f44-442c-870d-746870ba1c88",
+      "name": "Criar contato (Chatwoot - novo)",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://SEU_DOMINIO_CHATWOOT/api/v1/accounts/SEU_ACCOUNT_ID/contacts/{{ $json.payload[0].id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{ "name": "api_access_token", "value": "SEU_TOKEN_CHATWOOT_AQUI" }]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"custom_attributes\": {\n    \"cnpj\": \"{{ $json.cnpj }}\",\n    \"nome_cliente\": \"{{ $json.razao }}\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [-80, 528],
+      "id": "eda9c196-8be5-48dd-a006-a5d5f8efd078",
+      "name": "Atualiza dados do contato existente",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": { "options": {} },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [432, 336],
+      "id": "51573a6c-3c1e-41e9-92ec-eef4b5b2aeeb",
+      "name": "Loop - Envio de mensagens"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Fim do fluxo",
+      "typeVersion": 1,
+      "position": [1824, 352],
+      "id": "4889c5cd-d0d7-4c3c-8f29-c4f1a45326c3"
+    },
+    {
+      "parameters": { "amount": 10 },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [880, 352],
+      "id": "9f158675-69ae-44a0-a4cc-b222fff97d1b",
+      "name": "Wait 10s (entre envios)",
+      "webhookId": "WEBHOOK_ID_PLACEHOLDER_3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            { "id": "cda79448-1cd8-46dc-b9d5-7cf49c2c969b", "name": "razao", "value": "={{ $('Loop - Lotes de 60 contatos').item.json.razao }}", "type": "string" },
+            { "id": "e2da284d-f83e-40a5-be38-39ed040ad732", "name": "cnpj", "value": "={{ $('Loop - Lotes de 60 contatos').item.json.cnpj }}", "type": "string" },
+            { "id": "54696577-91ce-4dff-a0a5-875ca76ee5ce", "name": "wuid", "value": "={{ $('Loop - Lotes de 60 contatos').item.json.wuid.replace(/\\D/g, '') }}", "type": "string" },
+            { "id": "6f3cd391-49e6-4b8a-b8a2-de27272c842e", "name": "observacao", "value": "={{ $('Loop - Lotes de 60 contatos').item.json.observacao }}", "type": "string" },
+            { "id": "519e5c21-8eef-4a3e-9c90-0fba0f6db8b9", "name": "row_number", "value": "={{ $('Loop - Lotes de 60 contatos').item.json.row_number }}", "type": "number" }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [-80, 320],
+      "id": "60785a5b-054b-413c-8c44-bf830de6982b",
+      "name": "Prepara dados (novo contato criado)"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            { "id": "cda79448-1cd8-46dc-b9d5-7cf49c2c969b", "name": "razao", "value": "={{ $('Loop - Lotes de 60 contatos').item.json.razao }}", "type": "string" },
+            { "id": "e2da284d-f83e-40a5-be38-39ed040ad732", "name": "cnpj", "value": "={{ $('Loop - Lotes de 60 contatos').item.json.cnpj }}", "type": "string" },
+            { "id": "54696577-91ce-4dff-a0a5-875ca76ee5ce", "name": "wuid", "value": "={{ $('Loop - Lotes de 60 contatos').item.json.wuid.replace(/\\D/g, '') }}", "type": "string" },
+            { "id": "6f3cd391-49e6-4b8a-b8a2-de27272c842e", "name": "observacao", "value": "={{ $('Loop - Lotes de 60 contatos').item.json.observacao }}", "type": "string" },
+            { "id": "519e5c21-8eef-4a3e-9c90-0fba0f6db8b9", "name": "row_number", "value": "={{ $('Loop - Lotes de 60 contatos').item.json.row_number }}", "type": "number" }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1056, 352],
+      "id": "8df505be-bf2d-4a07-9793-998ff43ea380",
+      "name": "Prepara dados pós-envio"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            { "id": "cda79448-1cd8-46dc-b9d5-7cf49c2c969b", "name": "razao", "value": "={{ $('Loop - Lotes de 60 contatos').item.json.razao }}", "type": "string" },
+            { "id": "e2da284d-f83e-40a5-be38-39ed040ad732", "name": "cnpj", "value": "={{ $('Loop - Lotes de 60 contatos').item.json.cnpj }}", "type": "string" },
+            { "id": "54696577-91ce-4dff-a0a5-875ca76ee5ce", "name": "wuid", "value": "={{ $('Loop - Lotes de 60 contatos').item.json.wuid.replace(/\\D/g, '') }}", "type": "string" },
+            { "id": "6f3cd391-49e6-4b8a-b8a2-de27272c842e", "name": "observacao", "value": "={{ $('Loop - Lotes de 60 contatos').item.json.observacao }}", "type": "string" },
+            { "id": "519e5c21-8eef-4a3e-9c90-0fba0f6db8b9", "name": "row_number", "value": "={{ $('Loop - Lotes de 60 contatos').item.json.row_number }}", "type": "number" }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [160, 528],
+      "id": "46e6738e-2429-4f59-acdf-6e2f93c00b40",
+      "name": "Prepara dados (contato atualizado)"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [160, 336],
+      "id": "1a38077b-d9eb-4b01-8688-73735aabea5a",
+      "name": "Merge - Une novo e existente"
+    },
+    {
+      "parameters": {
+        "phoneNumberId": "SEU_WHATSAPP_PHONE_NUMBER_ID",
+        "recipientPhoneNumber": "={{ $json.wuid }}",
+        "template": "NOME_DO_SEU_TEMPLATE|pt_BR",
+        "components": {
+          "component": [
+            {
+              "bodyParameters": {
+                "parameter": [
+                  { "text": "={{ $json.observacao }}" },
+                  { "text": "={{ $json.razao }}" },
+                  { "text": "={{ $json.cnpj }}" }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [688, 352],
+      "id": "63cbe1a0-2175-49b1-979d-41b2c056d676",
+      "name": "Enviar template WhatsApp",
+      "webhookId": "WEBHOOK_ID_PLACEHOLDER_4",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "SUA_CREDENTIAL_ID",
+          "name": "NOME_DA_SUA_CREDENCIAL_WHATSAPP"
+        }
+      },
+      "onError": "continueRegularOutput"
+    }
+  ],
+  "connections": {
+    "If - Mensagem Aceita?": {
+      "main": [
+        [{ "node": "Update - Sucesso", "type": "main", "index": 0 }],
+        [{ "node": "Update - Falha", "type": "main", "index": 0 }]
+      ]
+    },
+    "Update - Sucesso": {
+      "main": [[{ "node": "Fim do fluxo", "type": "main", "index": 0 }]]
+    },
+    "Update - Falha": {
+      "main": [[{ "node": "Fim do fluxo", "type": "main", "index": 0 }]]
+    },
+    "Schedule Trigger - A cada 1 minuto": {
+      "main": [[{ "node": "Get - Botão (verifica se Start=true)", "type": "main", "index": 0 }]]
+    },
+    "Get - Botão (verifica se Start=true)": {
+      "main": [[{ "node": "Execution Data - marca execução", "type": "main", "index": 0 }]]
+    },
+    "Update - Botão (reseta Start=false)": {
+      "main": [[{ "node": "Get - Leads (sem status)", "type": "main", "index": 0 }]]
+    },
+    "Get - Leads (sem status)": {
+      "main": [[{ "node": "Gera variações do número (com/sem 9)", "type": "main", "index": 0 }]]
+    },
+    "Execution Data - marca execução": {
+      "main": [[{ "node": "Update - Botão (reseta Start=false)", "type": "main", "index": 0 }]]
+    },
+    "Gera variações do número (com/sem 9)": {
+      "main": [[{ "node": "Prepara campos do lead", "type": "main", "index": 0 }]]
+    },
+    "Buscar perfil (Evolution API)": {
+      "main": [[{ "node": "Enriquece com dados do loop", "type": "main", "index": 0 }]]
+    },
+    "Loop - Variações de número": {
+      "main": [
+        [{ "node": "Filtra duplicados e monta objeto do contato", "type": "main", "index": 0 }],
+        [{ "node": "Buscar perfil (Evolution API)", "type": "main", "index": 0 }]
+      ]
+    },
+    "Continuar loop variações": {
+      "main": [[{ "node": "Loop - Variações de número", "type": "main", "index": 0 }]]
+    },
+    "Filtra duplicados e monta objeto do contato": {
+      "main": [
+        [
+          { "node": "Update - Salva número corrigido", "type": "main", "index": 0 },
+          { "node": "Loop - Lotes de 60 contatos", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Update - Salva número corrigido": { "main": [[]] },
+    "Prepara campos do lead": {
+      "main": [[{ "node": "Loop - Variações de número", "type": "main", "index": 0 }]]
+    },
+    "Enriquece com dados do loop": {
+      "main": [[{ "node": "Wait 0.2s (desativado)", "type": "main", "index": 0 }]]
+    },
+    "Wait 0.2s (desativado)": {
+      "main": [[{ "node": "Continuar loop variações", "type": "main", "index": 0 }]]
+    },
+    "Buscar contato (Chatwoot)": {
+      "main": [[{ "node": "Prepara dados do contato existente", "type": "main", "index": 0 }]]
+    },
+    "Loop - Lotes de 60 contatos": {
+      "main": [
+        [{ "node": "Switch - Contato existe no Chatwoot?", "type": "main", "index": 0 }],
+        [{ "node": "Buscar contato (Chatwoot)", "type": "main", "index": 0 }]
+      ]
+    },
+    "Continuar loop de lotes": {
+      "main": [[{ "node": "Loop - Lotes de 60 contatos", "type": "main", "index": 0 }]]
+    },
+    "Wait 1 min (entre lotes)": {
+      "main": [[{ "node": "Continuar loop de lotes", "type": "main", "index": 0 }]]
+    },
+    "Switch - Contato existe no Chatwoot?": {
+      "main": [
+        [{ "node": "Atualiza dados do contato existente", "type": "main", "index": 0 }],
+        [{ "node": "Criar contato (Chatwoot - novo)", "type": "main", "index": 0 }]
+      ]
+    },
+    "Prepara dados do contato existente": {
+      "main": [[{ "node": "Wait 1 min (entre lotes)", "type": "main", "index": 0 }]]
+    },
+    "Criar contato (Chatwoot - novo)": {
+      "main": [[{ "node": "Prepara dados (novo contato criado)", "type": "main", "index": 0 }]]
+    },
+    "Atualiza dados do contato existente": {
+      "main": [[{ "node": "Prepara dados (contato atualizado)", "type": "main", "index": 0 }]]
+    },
+    "Loop - Envio de mensagens": {
+      "main": [
+        [],
+        [{ "node": "Enviar template WhatsApp", "type": "main", "index": 0 }]
+      ]
+    },
+    "Fim do fluxo": {
+      "main": [[{ "node": "Loop - Envio de mensagens", "type": "main", "index": 0 }]]
+    },
+    "Wait 10s (entre envios)": {
+      "main": [[{ "node": "Prepara dados pós-envio", "type": "main", "index": 0 }]]
+    },
+    "Prepara dados (novo contato criado)": {
+      "main": [[{ "node": "Merge - Une novo e existente", "type": "main", "index": 0 }]]
+    },
+    "Prepara dados pós-envio": {
+      "main": [[{ "node": "If - Mensagem Aceita?", "type": "main", "index": 0 }]]
+    },
+    "Prepara dados (contato atualizado)": {
+      "main": [[{ "node": "Merge - Une novo e existente", "type": "main", "index": 1 }]]
+    },
+    "Merge - Une novo e existente": {
+      "main": [[{ "node": "Loop - Envio de mensagens", "type": "main", "index": 0 }]]
+    },
+    "Enviar template WhatsApp": {
+      "main": [[{ "node": "Wait 10s (entre envios)", "type": "main", "index": 0 }]]
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}
