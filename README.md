@@ -1,1 +1,1 @@
-# Automa-o-de-disparo-VIA-WHATSAPP-e-N8N
+# Automação de disparos via N8N e Whatsapp
